@@ -1,0 +1,12 @@
+# Build artifacts
+**/bin/
+**/obj/
+
+# User/IDE files
+.vs/
+*.user
+*.suo
+
+# Test output
+TestResults/
+coverage/
