@@ -5,4 +5,5 @@ public sealed record FileEntry(
     long Size,
     DateTimeOffset ModifiedUtc,
     FileAttributes Attributes,
-    bool IsDirectory);
+    bool IsDirectory,
+    string? AbsolutePath = null);
