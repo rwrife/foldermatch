@@ -97,7 +97,8 @@ public sealed class FolderScanner : IFolderScanner
                             0,
                             modifiedUtc,
                             attributes,
-                            IsDirectory: true);
+                            IsDirectory: true,
+                            AbsolutePath: childAbsolutePath);
 
                         if (!IsSymlinkOrReparsePoint(attributes, childAbsolutePath))
                         {
@@ -112,7 +113,8 @@ public sealed class FolderScanner : IFolderScanner
                             info.Length,
                             info.LastWriteTimeUtc,
                             attributes,
-                            IsDirectory: false);
+                            IsDirectory: false,
+                            AbsolutePath: childAbsolutePath);
                         filesScanned++;
                     }
                 }
