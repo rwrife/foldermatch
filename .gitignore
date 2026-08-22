@@ -4,6 +4,9 @@
 
 # User/IDE files
 .vs/
+.cache/
+.local/
+**/.local/
 *.user
 *.suo
 

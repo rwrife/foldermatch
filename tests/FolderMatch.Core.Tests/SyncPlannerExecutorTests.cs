@@ -149,6 +149,35 @@ public sealed class SyncPlannerExecutorTests
     }
 
     [Fact]
+    public async Task ExecuteAsync_CancelledBeforeApply_WritesAnUndoJournalWithoutTouchingFiles()
+    {
+        using var left = new TempDir("left-cancel");
+        using var right = new TempDir("right-cancel");
+        using var journalDir = new TempDir("journal-cancel");
+        WriteFile(Path.Combine(left.Path, "new.txt"), "left-only");
+
+        var plan = new SyncPlan(new[]
+        {
+            new SyncAction("new.txt", SyncActionType.Copy, SyncSide.Left, SyncSide.Right, "test")
+        });
+        using var cancellation = new CancellationTokenSource();
+        cancellation.Cancel();
+
+        ISyncExecutor executor = new SyncExecutor();
+        var result = await executor.ExecuteAsync(left.Path, right.Path, plan, new SyncOptions
+        {
+            DryRun = false,
+            JournalDirectory = journalDir.Path
+        }, cancellation.Token);
+
+        Assert.Equal(0, result.AppliedCount);
+        Assert.Equal(1, result.SkippedCount);
+        Assert.Contains(result.Warnings, warning => warning.Contains("cancelled", StringComparison.OrdinalIgnoreCase));
+        Assert.True(File.Exists(result.JournalPath));
+        Assert.False(File.Exists(Path.Combine(right.Path, "new.txt")));
+    }
+
+    [Fact]
     public async Task ExecuteAsync_ApplyThenUndo_RestoresOriginalTrees()
     {
         using var left = new TempDir("left-undo");

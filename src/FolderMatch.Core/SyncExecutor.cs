@@ -62,9 +62,16 @@ public sealed class SyncExecutor : ISyncExecutor
         var appliedCount = 0;
         var skippedCount = 0;
 
-        foreach (var action in plan.Actions)
+        for (var actionIndex = 0; actionIndex < plan.Actions.Count; actionIndex++)
         {
-            cancellationToken.ThrowIfCancellationRequested();
+            if (cancellationToken.IsCancellationRequested)
+            {
+                skippedCount += plan.Actions.Count - actionIndex;
+                warnings.Add("Apply was cancelled. Completed actions were preserved in the undo journal.");
+                break;
+            }
+
+            var action = plan.Actions[actionIndex];
 
             if (action.ActionType == SyncActionType.Skip)
             {
@@ -101,7 +108,9 @@ public sealed class SyncExecutor : ISyncExecutor
             }
         }
 
-        var journalPath = await _undoJournal.WriteAsync(journal, journalDirectory, cancellationToken);
+        // The journal is the safety boundary for a partially applied plan. Always finish
+        // writing it even when cancellation was requested between actions.
+        var journalPath = await _undoJournal.WriteAsync(journal, journalDirectory, CancellationToken.None);
 
         return new SyncExecutionResult(
             DryRun: false,
