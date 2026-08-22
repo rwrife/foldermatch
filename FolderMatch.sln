@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{34DC106A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderMatch.Core.Tests", "tests\FolderMatch.Core.Tests\FolderMatch.Core.Tests.csproj", "{37B7FE2A-38BF-4B5C-A8EA-F865AFB7725C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderMatch.App", "src\FolderMatch.App\FolderMatch.App.csproj", "{2C18D30B-E31B-4F6E-8478-EF9544B0F11F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FolderMatch.App.Tests", "tests\FolderMatch.App.Tests\FolderMatch.App.Tests.csproj", "{3819B39A-163E-4DD1-97B2-BC14DE3C05CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,9 +32,19 @@ Global
 		{37B7FE2A-38BF-4B5C-A8EA-F865AFB7725C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37B7FE2A-38BF-4B5C-A8EA-F865AFB7725C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37B7FE2A-38BF-4B5C-A8EA-F865AFB7725C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C18D30B-E31B-4F6E-8478-EF9544B0F11F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C18D30B-E31B-4F6E-8478-EF9544B0F11F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C18D30B-E31B-4F6E-8478-EF9544B0F11F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C18D30B-E31B-4F6E-8478-EF9544B0F11F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3819B39A-163E-4DD1-97B2-BC14DE3C05CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3819B39A-163E-4DD1-97B2-BC14DE3C05CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3819B39A-163E-4DD1-97B2-BC14DE3C05CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3819B39A-163E-4DD1-97B2-BC14DE3C05CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{F5037197-2D0F-4CD4-9D72-2F63152A47B0} = {116DF0AF-3E86-48BA-A6D0-76DDB09E8F25}
 		{37B7FE2A-38BF-4B5C-A8EA-F865AFB7725C} = {34DC106A-9938-4C0A-B5F2-FB173C079F04}
+		{2C18D30B-E31B-4F6E-8478-EF9544B0F11F} = {116DF0AF-3E86-48BA-A6D0-76DDB09E8F25}
+		{3819B39A-163E-4DD1-97B2-BC14DE3C05CD} = {34DC106A-9938-4C0A-B5F2-FB173C079F04}
 	EndGlobalSection
 EndGlobal

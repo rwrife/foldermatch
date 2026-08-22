@@ -1,0 +1,143 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="FolderMatch.App.Views.MainWindow"
+        Title="FolderMatch"
+        Width="1180"
+        Height="780"
+        MinWidth="900"
+        MinHeight="620">
+  <Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto" Margin="18" RowSpacing="12">
+    <Grid Grid.Row="0" ColumnDefinitions="Auto,260,Auto,Auto,Auto,*,Auto" ColumnSpacing="8">
+      <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Profile" />
+      <ComboBox Grid.Column="1"
+                ItemsSource="{Binding Profiles}"
+                SelectedItem="{Binding SelectedProfile}"
+                DisplayMemberBinding="{Binding Name}"
+                PlaceholderText="Saved profiles" />
+      <Button Grid.Column="2" Command="{Binding LoadProfileCommand}" Content="Load" />
+      <Button Grid.Column="3" Command="{Binding DeleteProfileCommand}" Content="Delete" />
+      <TextBox Grid.Column="5" Text="{Binding ProfileName}" Watermark="Profile name" />
+      <Button Grid.Column="6" Command="{Binding SaveProfileCommand}" Content="Save profile" />
+    </Grid>
+
+    <Grid Grid.Row="1" RowDefinitions="Auto,Auto" ColumnDefinitions="90,*,Auto" RowSpacing="8" ColumnSpacing="8">
+      <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Left folder" />
+      <TextBox Grid.Column="1" Text="{Binding LeftPath}" Watermark="Choose or enter the source folder" />
+      <Button Grid.Column="2" Click="BrowseLeft_Click" Content="Browse…" />
+
+      <TextBlock Grid.Row="1" VerticalAlignment="Center" FontWeight="SemiBold" Text="Right folder" />
+      <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RightPath}" Watermark="Choose or enter the destination folder" />
+      <Button Grid.Row="1" Grid.Column="2" Click="BrowseRight_Click" Content="Browse…" />
+    </Grid>
+
+    <Border Grid.Row="2" Padding="10" CornerRadius="6" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+      <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,180,Auto,*,Auto" RowSpacing="10" ColumnSpacing="10">
+        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Compare mode" />
+        <ComboBox Grid.Column="1" ItemsSource="{Binding CompareModes}" SelectedItem="{Binding CompareMode}" />
+        <Button Grid.Column="2" Command="{Binding CompareCommand}" Content="Compare" Classes="accent" />
+        <TextBlock Grid.Column="3" VerticalAlignment="Center" Text="{Binding DiffSummary}" />
+        <Button Grid.Column="4" Command="{Binding CancelCommand}" Content="Cancel" IsVisible="{Binding IsBusy}" />
+
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="5" Orientation="Horizontal" Spacing="12">
+          <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Show" />
+          <CheckBox IsChecked="{Binding ShowNew}" Content="New" />
+          <CheckBox IsChecked="{Binding ShowUpdated}" Content="Updated" />
+          <CheckBox IsChecked="{Binding ShowDeleted}" Content="Deleted" />
+          <CheckBox IsChecked="{Binding ShowConflict}" Content="Conflict" />
+          <CheckBox IsChecked="{Binding ShowIdentical}" Content="Identical" />
+          <Separator />
+          <Button Command="{Binding SelectAllCommand}" Content="Check all" />
+          <Button Command="{Binding SelectNoneCommand}" Content="Check none" />
+          <TextBlock VerticalAlignment="Center" Text="{Binding SelectedCount, StringFormat='{}{0} selected'}" />
+          <TextBlock VerticalAlignment="Center" Opacity="0.7" Text="{Binding VisibleCount, StringFormat='{}{0} visible'}" />
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="3" BorderBrush="{DynamicResource BorderMediumColor}" BorderThickness="1" CornerRadius="6">
+      <Grid RowDefinitions="Auto,*">
+        <Grid ColumnDefinitions="42,48,*,180,180" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}" Margin="0" Height="36">
+          <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" Text="State" />
+          <TextBlock Grid.Column="2" VerticalAlignment="Center" FontWeight="SemiBold" Text="Relative path" />
+          <TextBlock Grid.Column="3" VerticalAlignment="Center" FontWeight="SemiBold" Text="Left" />
+          <TextBlock Grid.Column="4" VerticalAlignment="Center" FontWeight="SemiBold" Text="Right" />
+        </Grid>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Items}" SelectionMode="Single">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="32,48,*,180,180" MinHeight="36">
+                <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsSelected}" />
+                <TextBlock Grid.Column="1"
+                           VerticalAlignment="Center"
+                           FontSize="17"
+                           FontWeight="Bold"
+                           Foreground="{Binding StatusBrush}"
+                           Text="{Binding StatusGlyph}"
+                           ToolTip.Tip="{Binding Status}" />
+                <TextBlock Grid.Column="2"
+                           VerticalAlignment="Center"
+                           Text="{Binding RelativePath}"
+                           TextTrimming="CharacterEllipsis"
+                           ToolTip.Tip="{Binding RelativePath}" />
+                <TextBlock Grid.Column="3" VerticalAlignment="Center" Opacity="0.75" Text="{Binding LeftDetails}" />
+                <TextBlock Grid.Column="4" VerticalAlignment="Center" Opacity="0.75" Text="{Binding RightDetails}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="4" Padding="10" CornerRadius="6" Background="{DynamicResource CardBackgroundFillColorDefaultBrush}">
+      <Grid ColumnDefinitions="Auto,210,Auto,Auto,Auto,*,Auto" ColumnSpacing="10">
+        <TextBlock VerticalAlignment="Center" FontWeight="SemiBold" Text="Sync direction" />
+        <ComboBox Grid.Column="1" ItemsSource="{Binding SyncDirections}" SelectedItem="{Binding SyncDirection}" />
+        <Button Grid.Column="2" Command="{Binding PreviewCommand}" Content="Preview dry run" />
+        <Button Grid.Column="3" Command="{Binding ApplyCommand}" Content="Apply reviewed plan" Classes="accent" IsEnabled="{Binding CanApply}" />
+        <Button Grid.Column="4" Command="{Binding UndoCommand}" Content="Undo last apply" IsEnabled="{Binding CanUndo}" />
+        <TextBlock Grid.Column="5" VerticalAlignment="Center" Opacity="0.75" Text="Deletes use Recycle Bin / Trash; an undo journal is always written." TextWrapping="Wrap" />
+        <ProgressBar Grid.Column="6" Width="110" IsIndeterminate="True" IsVisible="{Binding IsBusy}" />
+      </Grid>
+    </Border>
+
+    <Border Grid.Row="5"
+            Height="180"
+            Padding="10"
+            BorderBrush="{DynamicResource BorderMediumColor}"
+            BorderThickness="1"
+            CornerRadius="6"
+            Background="{DynamicResource SolidBackgroundFillColorBaseBrush}"
+            IsVisible="{Binding HasPlan}">
+      <Grid RowDefinitions="Auto,*" RowSpacing="8">
+        <TextBlock FontWeight="SemiBold" Text="{Binding PlanSummary}" />
+        <ListBox Grid.Row="1" ItemsSource="{Binding PlanActions}">
+          <ListBox.ItemsPanel>
+            <ItemsPanelTemplate>
+              <VirtualizingStackPanel />
+            </ItemsPanelTemplate>
+          </ListBox.ItemsPanel>
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <Grid ColumnDefinitions="90,*,120,2*" ColumnSpacing="8">
+                <TextBlock FontWeight="SemiBold" Text="{Binding Action}" />
+                <TextBlock Grid.Column="1" Text="{Binding RelativePath}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Grid.Column="2" Text="{Binding Direction}" />
+                <TextBlock Grid.Column="3" Opacity="0.75" Text="{Binding Reason}" TextTrimming="CharacterEllipsis" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+    </Border>
+
+    <StackPanel Grid.Row="6" Spacing="6">
+      <TextBlock FontWeight="SemiBold" Text="{Binding StatusText}" />
+      <TextBlock Opacity="0.75" Text="{Binding ProgressText}" IsVisible="{Binding IsBusy}" TextTrimming="CharacterEllipsis" />
+    </StackPanel>
+  </Grid>
+</Window>

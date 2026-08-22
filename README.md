@@ -81,6 +81,16 @@ foldermatch sync ~/Projects/site /Volumes/Backup/site --direction mirror-lr --dr
 foldermatch sync ~/Projects/site /Volumes/Backup/site --direction mirror-lr --trash --journal
 ```
 
+### Run the desktop app from source
+
+The Avalonia desktop app uses the same .NET 8 codebase on Windows and macOS:
+
+```bash
+dotnet run --project src/FolderMatch.App/FolderMatch.App.csproj
+```
+
+Choose both folders, compare, check the entries to include, and select **Preview dry run**. The Apply button stays disabled until a plan has been reviewed. Deletes go to Recycle Bin / Trash and each apply writes an undo journal under the per-user app-data folder.
+
 ## Local-AI integration (optional)
 
 foldermatch works fully without any AI. When enabled, an optional local-AI assist connects to an **Ollama** or **llama.cpp** OpenAI-compatible endpoint on `localhost` to:
